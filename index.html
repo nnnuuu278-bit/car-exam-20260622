@@ -226,6 +226,7 @@ function submitQuiz(){
             });
         }
 
+        // 用打亂後的選項來顯示
         q.shuffledOptions.forEach((opt,i)=>{
             let cls = "option";
             if(opt.isCorrect){
@@ -235,17 +236,17 @@ function submitQuiz(){
             } else if(i+1 == answers[n]){
                 cls += " selected";
             }
-            let content = opt.text;
+            let content = opt.text || "";
             if(opt.img) content += "<br><img src='"+opt.img+"' style='max-width:200px'>";
             div += "<div class='"+cls+"'>"+content+"</div>";
         });
 
-        // 用 isCorrect 判斷
+        // 判斷答案
         let chosenIndex = answers[n] - 1;
         if (chosenIndex >= 0 && q.shuffledOptions[chosenIndex].isCorrect) {
             score += 2;
             correctCount++;
-        } else if (answers[n] !== undefined) { // 只有有作答時才算錯
+        } else if (answers[n] !== undefined) {
             wrongCount++;
             if (!favorites.includes(q.qid)) {
                 favorites.push(q.qid);
