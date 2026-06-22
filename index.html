@@ -226,24 +226,19 @@ function submitQuiz(){
             });
         }
 
-        // 確保 options 存在
-        if(!q.options || q.options.length === 0){
-            div += "<p style='color:red'>⚠️ 此題沒有選項資料</p>";
-        } else {
-            q.options.forEach((opt,i)=>{
-                let cls = "option";
-                if(i+1 == q.answer){
-                    cls += " correct";
-                } else if(i+1 == answers[n] && answers[n] != q.answer){
-                    cls += " incorrect";
-                } else if(i+1 == answers[n]){
-                    cls += " selected";
-                }
-                let content = opt.text || "";
-                if(opt.img) content += "<br><img src='"+opt.img+"' style='max-width:200px'>";
-                div += "<div class='"+cls+"'>"+content+"</div>";
-            });
-        }
+        q.options.forEach((opt,i)=>{
+            let cls = "option";
+            if(i+1 == q.answer){
+                cls += " correct"; // 正確答案
+            } else if(answers[n] == i+1 && answers[n] != q.answer){
+                cls += " incorrect"; // 選錯
+            } else if(answers[n] == i+1){
+                cls += " selected"; // 使用者選的答案
+            }
+            let content = opt.text || "";
+            if(opt.img) content += "<br><img src='"+opt.img+"' style='max-width:200px'>";
+            div += "<div class='"+cls+"'>"+content+"</div>";
+        });
 
         // 判斷答案
         if (answers[n] !== undefined && answers[n] == q.answer) {
