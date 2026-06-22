@@ -225,26 +225,22 @@ function submitQuiz(){
             });
         }
 
-        // 確保 q.shuffledOptions 存在
-        if(!q.shuffledOptions){
-            q.shuffledOptions = q.options; // fallback
-        }
-
-        q.shuffledOptions.forEach((opt,i)=>{
+        // 用原始 options 顯示結果，避免順序跑掉
+        q.options.forEach((opt,i)=>{
             let cls = "option";
             if(i+1 == q.answer){
-                cls += " correct";
+                cls += " correct"; // 正確答案標綠色
             } else if(i+1 == answers[n] && answers[n] != q.answer){
-                cls += " incorrect";
+                cls += " incorrect"; // 選錯的標紅色
             } else if(i+1 == answers[n]){
-                cls += " selected";
+                cls += " selected"; // 使用者選的答案
             }
             let content = opt.text || "";
             if(opt.img) content += "<br><img src='"+opt.img+"' style='max-width:200px'>";
             div += "<div class='"+cls+"'>"+content+"</div>";
         });
 
-        // 判斷答案（只在有作答時才判斷）
+        // 判斷答案
         let chosenIndex = (answers[n] !== undefined) ? answers[n] : -1;
         if (chosenIndex == q.answer) {
             score += 2;
