@@ -214,19 +214,23 @@ function prevQuestion(){ if(current>0){ current--; showQuestion(current); } }
 function nextQuestion(){ if(current<questions.length-1){ current++; showQuestion(current); } }
 
 function submitQuiz(){
-    clearInterval(timerInterval);
+    clearInterval(timerInterval); // 停止計時
     let score = 0, correctCount = 0, wrongCount = 0;
     let resultHTML = "<h2>測驗結果</h2>";
 
     questions.forEach((q,n)=>{
-        let div = "<p><b>"+q.qid+".</b> "+q.text+"</p>";
+        let div = "<p><b>"+q.qid+".</b> "+(q.text || "")+"</p>";
         if(q.images && q.images.length > 0){
             q.images.forEach(imgPath=>{
                 div += "<img src='"+imgPath+"' style='max-width:300px'>";
             });
         }
 
-        // 用打亂後的選項來顯示
+        // 確保 q.shuffledOptions 存在
+        if(!q.shuffledOptions){
+            q.shuffledOptions = q.options; // fallback
+        }
+
         q.shuffledOptions.forEach((opt,i)=>{
             let cls = "option";
             if(opt.isCorrect){
@@ -241,8 +245,8 @@ function submitQuiz(){
             div += "<div class='"+cls+"'>"+content+"</div>";
         });
 
-        // 判斷答案
-        let chosenIndex = answers[n] - 1;
+        // 判斷答案（只在有作答時才判斷）
+        let chosenIndex = (answers[n] !== undefined) ? answers[n] - 1 : -1;
         if (chosenIndex >= 0 && q.shuffledOptions[chosenIndex].isCorrect) {
             score += 2;
             correctCount++;
